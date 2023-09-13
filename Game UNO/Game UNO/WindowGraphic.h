@@ -14,10 +14,12 @@ private:
 	int mainMenuSelected;
 	RectangleShape pauseBackground, instructionsBackground, gameBackground, windowFlipBackground;
 	Texture pauseBackgroundTexture, instructionsBackgroundTexture, gameBackgroundTexture, windowFlipBackgroundTexture;
-	RenderWindow* window;
-	Event* gameEvent;
+	//RenderWindow window;
+	
 	Texture backroundTexture;
 	RectangleShape background;
+	RectangleShape button;
+
 
 
 
@@ -26,6 +28,7 @@ public:
 	void printMainMenu();
 	void processMainMenuEvents();
 	void closeWindowAction();
+    bool startGamebutton();
 	
 
 };
