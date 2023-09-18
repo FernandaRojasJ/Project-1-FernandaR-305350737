@@ -12,7 +12,7 @@ int main()
 {
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     WindowGraphic game = WindowGraphic();
-    game.printMainMenu();
+    game.run();
 }
 
 

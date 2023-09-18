@@ -12,29 +12,38 @@ class WindowGraphic
 
 private:
 	int mainMenuSelected;
-	RectangleShape pauseBackground, instructionsBackground, gameBackground, windowFlipBackground;
-	Texture pauseBackgroundTexture, instructionsBackgroundTexture, gameBackgroundTexture, windowFlipBackgroundTexture;
 	Texture backroundTexture;
 	RectangleShape background;
-	RectangleShape button;
+	Texture backroundGameTexture;
+	RectangleShape backgroundGame;
+	RectangleShape buttonMainMenu[5];
+	Text buttonText[6];
+	RenderWindow* window;
 	string selectedMode = "";
-	
-
-
+	Event* gameEvent;
+	Font font;
 
 public:
+	bool isPlayerVsPlayer = false;
+	bool isPlayerVsComputer = false;
+
 	WindowGraphic();
-	void printMainMenu();
-	void processMainMenuEvents();
 	void closeWindowAction();
-    bool startGameButton();
-	bool exitButton();
-	bool helpButton();
-	bool openHelpWindow();
-	int modeTitle();
-	void playerVrsPlayerButton();
-	void playerVrsComputerButton();
-	void gameWindow();
+	void processMainMenuEvents();
+	void getMainMenuButtonsActions();
+	Vector2i getMousePosition();
+	void initializeTheMainMenuButtons();
+	void drawMainButton();
+	void printMainMenu();
+	void printGameWindow();
+	void initializeTheButtonText();
+	void drawTextButton();
+	void drawMatrixCard();
+	void run();
+	void getMouseMovementMainMenu();
+	void drawPlayerVsPlayerGame();
+	void drawPlayerVsComputerGame();
+
 	
 };
 

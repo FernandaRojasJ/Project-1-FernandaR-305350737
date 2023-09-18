@@ -1,1 +1,40 @@
-﻿  Game UNO.vcxproj -> C:\Users\Usuario\OneDrive - Universidad Nacional de Costa Rica\Universidad\Cuarto semestre\Progra 1\Respaldo\Project-1-FernandaR-305350737\Game UNO\x64\Debug\Game UNO.exe
+﻿  Main.cpp
+  WindowGraphic.cpp
+C:\Users\Usuario\OneDrive - Universidad Nacional de Costa Rica\Universidad\Cuarto semestre\Progra 1\Respaldo\Project-1-FernandaR-305350737\Game UNO\Game UNO\WindowGraphic.cpp(119,102): warning C4244: 'argumento': conversión de 'T' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Usuario\OneDrive - Universidad Nacional de Costa Rica\Universidad\Cuarto semestre\Progra 1\Respaldo\Project-1-FernandaR-305350737\Game UNO\Game UNO\WindowGraphic.cpp(119,80): warning C4244: 'argumento': conversión de 'T' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Usuario\OneDrive - Universidad Nacional de Costa Rica\Universidad\Cuarto semestre\Progra 1\Respaldo\Project-1-FernandaR-305350737\Game UNO\Game UNO\WindowGraphic.cpp(263,102): warning C4244: 'argumento': conversión de 'T' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Usuario\OneDrive - Universidad Nacional de Costa Rica\Universidad\Cuarto semestre\Progra 1\Respaldo\Project-1-FernandaR-305350737\Game UNO\Game UNO\WindowGraphic.cpp(263,80): warning C4244: 'argumento': conversión de 'T' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+  Generando código...
+  Game UNO.vcxproj -> C:\Users\Usuario\OneDrive - Universidad Nacional de Costa Rica\Universidad\Cuarto semestre\Progra 1\Respaldo\Project-1-FernandaR-305350737\Game UNO\x64\Debug\Game UNO.exe
