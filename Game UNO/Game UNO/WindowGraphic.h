@@ -18,8 +18,7 @@ private:
 	RectangleShape background;
 	RectangleShape button;
 	string selectedMode = "";
-	bool modeSelected = false;
-
+	
 
 
 
@@ -33,16 +32,9 @@ public:
 	bool helpButton();
 	bool openHelpWindow();
 	int modeTitle();
-	bool playerVrsPlayerButton();
-	bool playerVrsComputerButton();
+	void playerVrsPlayerButton();
+	void playerVrsComputerButton();
 	void gameWindow();
-	string getselectedMode() const
-	{
-		return selectedMode;
-	}
-	void setSelectedMode(const string& mode)
-	{
-		selectedMode = mode;
-	}
+	
 };
 

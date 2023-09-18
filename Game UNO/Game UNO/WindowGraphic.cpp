@@ -3,6 +3,8 @@
 VideoMode _window = VideoMode::getDesktopMode();
 RenderWindow window(_window, "Game window UNO", Style::Fullscreen);
 string selectedMode = "";
+bool selected_PvsP;
+bool selected_PvsPC;
 Event gameEvent;
 
 bool WindowGraphic::startGameButton()
@@ -36,29 +38,12 @@ bool WindowGraphic::startGameButton()
         {
             if (event.mouseButton.button == Mouse::Left)
             {
-                if (modeSelected) 
-                {
-                    return true;
-                }
-                else
-                {
-                    cout << "Por favor selecciona un modo de juego primero" << endl;
-                }
                 Vector2i mousePos = Mouse::getPosition(window);
                 FloatRect textBounds = playText.getGlobalBounds();
 
                 if (playButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
                 {
-                    bool selected = true;
-                    if (selected == true)
-                    {
-                        playText.setFillColor(colorHover);
-                        return true;
-                    }
-                    else
-                    {
-                        playText.setFillColor(colorNormal);
-                    }
+                    return true;
                 }
                 
             }
@@ -138,7 +123,7 @@ int WindowGraphic::modeTitle()
     window.draw(titleText);
 }
 
-bool WindowGraphic::playerVrsPlayerButton()
+void WindowGraphic::playerVrsPlayerButton()
 {
     Font font;
 
@@ -151,6 +136,11 @@ bool WindowGraphic::playerVrsPlayerButton()
 
     Text playerVrsPlayerText("-Player vrs Player", font, 40);
     playerVrsPlayerText.setPosition(75, 350);
+
+    if ((selected_PvsP == true) && (selected_PvsPC == false))
+    {
+        playerVrsPlayerText.setFillColor(Color::Black);
+    }
 
     RectangleShape playerButton;
     playerButton.setSize(Vector2f(playerVrsPlayerText.getGlobalBounds().width, playerVrsPlayerText.getGlobalBounds().height));
@@ -171,9 +161,9 @@ bool WindowGraphic::playerVrsPlayerButton()
 
                 if (playerButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
                 {
-                    setSelectedMode("Plaver vs Player");
-                    modeSelected = true;
-                    return true;
+                    selectedMode = "Player vs Player";
+                    selected_PvsP = true;
+                    selected_PvsPC = false;
                 }
             }
         }
@@ -186,7 +176,7 @@ bool WindowGraphic::playerVrsPlayerButton()
 
 }
 
-bool WindowGraphic::playerVrsComputerButton()
+void WindowGraphic::playerVrsComputerButton()
 {
     Font font;
 
@@ -199,6 +189,11 @@ bool WindowGraphic::playerVrsComputerButton()
 
     Text playerVrsComputerText("-Player vrs Computer", font, 40);
     playerVrsComputerText.setPosition(75, 450);
+
+    if ((selected_PvsPC == true) && (selected_PvsP == false))
+    {
+        playerVrsComputerText.setFillColor(Color::Black);
+    }
 
     RectangleShape player_ComputerButton;
     player_ComputerButton.setSize(Vector2f(playerVrsComputerText.getGlobalBounds().width, playerVrsComputerText.getGlobalBounds().height));
@@ -221,9 +216,9 @@ bool WindowGraphic::playerVrsComputerButton()
 
                 if (player_ComputerButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
                 {
-                    setSelectedMode("Plaver vs Player"); 
-                    modeSelected = true;
-                    return true;
+                    selectedMode = "Player vs Computer";
+                    selected_PvsPC = true;
+                    selected_PvsP = false;
                 }
             }
         }
@@ -237,16 +232,35 @@ void WindowGraphic::gameWindow()
 {
     VideoMode _newWindow = VideoMode::getDesktopMode();
     RenderWindow newWindow(_newWindow, "Game Screen", Style::Fullscreen);
-    while (newWindow.isOpen())
+
+    if (!selectedMode.empty())
     {
-        Event newEvent;
-        while (newWindow.pollEvent(newEvent))
+        Texture backgroundTexture;
+        if (!backgroundTexture.loadFromFile("resources/backgrounds/mainMenu.jpg"))
         {
-            if (newEvent.type == Event::Closed)
-                newWindow.close();
+
+        }
+
+        Sprite backgroundSprite;
+        backgroundSprite.setTexture(backgroundTexture);
+
+        while (newWindow.isOpen())
+        {
+            Event newEvent;
+
+            while (newWindow.pollEvent(newEvent))
+            {
+                if (newEvent.type == Event::Closed)
+                    newWindow.close();
+            }
+
+            newWindow.clear();
+
+            newWindow.draw(backgroundSprite);
+
+            newWindow.display();
         }
     }
-    
 }
 
 bool WindowGraphic::exitButton()
@@ -336,15 +350,18 @@ bool WindowGraphic::helpButton()
 
 void WindowGraphic::printMainMenu()
 {
-	while (window.isOpen()) {
-		window.clear();
+    while (window.isOpen()) {
+        window.clear();
         window.draw(background);
 
-        if (startGameButton()==true) {
- 
-            window.close();
-            gameWindow();
-       }
+        if (startGameButton() == true)
+        {
+            if (!selectedMode.empty())
+            {
+                window.close();
+                gameWindow();
+            }
+        }
 
         if (exitButton() == true) {
 
@@ -363,15 +380,10 @@ void WindowGraphic::printMainMenu()
             modeTitle();
         }
 
-        if (playerVrsPlayerButton() == true) {
-
             playerVrsPlayerButton();
-        }
-
-        if (playerVrsComputerButton() == true) {
 
             playerVrsComputerButton();
-        }
+        
 
         Texture _texture;
         if (!_texture.loadFromFile("resources/Cartas/Cartas UNO.png"))
