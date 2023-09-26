@@ -11,15 +11,16 @@ void Player::setName(string aName)
 	name = aName;
 }
 
-vector<Card> Player::getPlayerOneDeck()
+vector<Card> Player::getPlayerDeck()
 {
-	return vector<Card>();
+	return playerDeck;
 }
 
-void Player::setPlayerOneDeck(vector<Card> aPlayerOneDeck)
+void Player::setPlayerDeck(vector<Card> aPlayerDeck)
 {
-
+	playerDeck = aPlayerDeck;
 }
+
 
 string Player::getName()
 {

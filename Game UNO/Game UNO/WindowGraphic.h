@@ -57,5 +57,7 @@ public:
 	void printHelpWindow();
 	void playerTurn();
 	void gameScore();
-};
+	void drawPlayerOneCard();
+	void drawPlayerTwoCard();
 
+};

@@ -9,19 +9,22 @@ private:
 
 	string name;
 	int points;
-	vector<Card> playerOneDeck;
-	vector<Card>playerTwoDeck;
+
 	
 
 public:
 
 	Player(string aName);
 
+	vector<Card> playerDeck;
+
 	string getName();
 	void setName(string aName);
 
-	vector<Card> getPlayerOneDeck();
-	void setPlayerOneDeck(vector<Card>aPlayerOneDeck);
+	vector<Card> getPlayerDeck();
+	void setPlayerDeck(vector<Card> aPlayerDeck);
+
+	
 
 
 

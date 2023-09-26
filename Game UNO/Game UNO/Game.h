@@ -17,12 +17,11 @@ private:
 	Texture cardTexture;
 	Player playerOne= Player("Jugador 1: ");
 	Player playerTwo = Player("Judador 2: ");
-	
-
-public:
-	Game();
 	vector<Card> trashDeck;
 	vector<Card> cards;
+public:
+	Game();
+
 	void loadCards();
 
 	Player getPlayerOne();
@@ -31,7 +30,15 @@ public:
 	Player getPlayerTwo();
 	void setPlayerTwo(Player aPlayerTwo);
 
+	vector<Card> getTrashDeck();
+	void getTrashDeck(vector<Card> aTrashDeck);
+
+	vector<Card> getCards();
+	void getCards(vector<Card> aCards);
+
 	void assingCardsToPlayer();
+
+	void mainDeck();
 
 
 };

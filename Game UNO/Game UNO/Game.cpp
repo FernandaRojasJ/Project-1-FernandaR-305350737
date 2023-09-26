@@ -65,13 +65,16 @@ void Game::loadCards()
 				cards.push_back(card);
 			}
 			cont++;
-			cout << "se agrega bien";
+			//cout << "se agrega bien";
+			
 		}
 	}
+	
 }
 
 Player Game::getPlayerOne()
 {
+	
 	return playerOne;
 }
 
@@ -82,6 +85,7 @@ void Game::setPlayerOne(Player aPlayerOne)
 
 Player Game::getPlayerTwo()
 {
+
 	return playerTwo;
 }
 
@@ -90,8 +94,60 @@ void Game::setPlayerTwo(Player aPlayerTwo)
 	playerTwo = aPlayerTwo;
 }
 
+vector<Card> Game::getTrashDeck()
+{
+	return trashDeck;
+}
+
+void Game::getTrashDeck(vector<Card> aTrashDeck)
+{
+	trashDeck = aTrashDeck;
+}
+
+vector<Card> Game::getCards()
+{
+	return cards;
+}
+
+void Game::getCards(vector<Card> aCards)
+{
+	cards = aCards;
+}
+
 void Game::assingCardsToPlayer()
 {
+	loadCards();
+	 //Genera un índice aleatorio entre 0 y cards.size() - 1
+	int index;
+	srand(time(NULL));
 	
+	 //Pasar 8 cartas a PlayerOne de forma aleatoria
+	for (int i = 0; i < 8; ++i)
+	{
+		
+		index = rand() % cards.size(); // Obtener un índice aleatorio
+
+		playerOne.playerDeck.push_back(cards[index]);
+		// Agregar la carta al vector de PlayerOne
 	
+		cards.erase(cards.begin() + index); // Eliminar la carta del vector cards
+		//cout << playerOne.getPlayerDeck()[i].getId();
+		
+	}
+
+	// Pasar 8 cartas a PlayerTwo de forma aleatoria
+	for (int i = 0; i < 8; ++i)
+	{
+		index = rand() % cards.size(); // Obtener un índice aleatorio
+		playerTwo.playerDeck.push_back(cards[index]); // Agregar la carta al vector de PlayerTwo
+		cards.erase(cards.begin() + index); // Eliminar la carta del vector cards
+		//cout << "se agrega bien";
+	}
+}
+
+void Game::mainDeck()
+{
+
+	
+
 }

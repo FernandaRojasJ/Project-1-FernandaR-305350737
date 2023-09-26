@@ -1,6 +1,7 @@
 #include "WindowGraphic.h"
 #include "Card.h"
 #include "Player.h"
+#include "Game.h"
 
 //Card cardInstance;
 
@@ -63,18 +64,18 @@ void WindowGraphic::processMainMenuEvents() {
 
 void WindowGraphic::drawMatrixCard()
 {
-    RectangleShape temporal;
     game.loadCards();
-    temporal = game.cards[56].getGameCard();
+
+    RectangleShape temporal = game.getCards()[107].getGameCard();
     temporal.setPosition(1200, 600);
 
-    RectangleShape temporal1 = game.cards[70].getGameCard();
+    RectangleShape temporal1 = game.getCards()[70].getGameCard();
     temporal1.setPosition(1200, 500);
 
-    RectangleShape temporal2 = game.cards[84].getGameCard();
+    RectangleShape temporal2 = game.getCards()[84].getGameCard();
     temporal2.setPosition(1200, 400);
 
-    RectangleShape temporal3 = game.cards[98].getGameCard();
+    RectangleShape temporal3 = game.getCards()[98].getGameCard();
     temporal3.setPosition(1200, 300);
 
     window->draw(temporal);
@@ -82,6 +83,82 @@ void WindowGraphic::drawMatrixCard()
     window->draw(temporal2);
     window->draw(temporal3);
 
+}
+
+void WindowGraphic::drawPlayerOneCard()
+{
+    game.assingCardsToPlayer();
+
+    RectangleShape temp = game.getPlayerOne().getPlayerDeck()[0].getGameCard();
+    temp.setPosition(300, 100);
+
+    RectangleShape temp0 = game.getPlayerOne().getPlayerDeck()[1].getGameCard();
+    temp0.setPosition(400, 100);
+
+    RectangleShape temp1 = game.getPlayerOne().getPlayerDeck()[2].getGameCard();
+    temp1.setPosition(500, 100);
+
+    RectangleShape temp2 = game.getPlayerOne().getPlayerDeck()[3].getGameCard();
+    temp2.setPosition(600, 100);
+
+    RectangleShape temp3 = game.getPlayerOne().getPlayerDeck()[4].getGameCard();
+    temp3.setPosition(700, 100);
+
+    RectangleShape temp4 = game.getPlayerOne().getPlayerDeck()[5].getGameCard();
+    temp4.setPosition(800, 100);
+
+    RectangleShape temp5 = game.getPlayerOne().getPlayerDeck()[6].getGameCard();
+    temp5.setPosition(900, 100);
+
+    RectangleShape temp6 = game.getPlayerOne().getPlayerDeck()[7].getGameCard();
+    temp6.setPosition(1000, 100);
+
+    window->draw(temp);
+    window->draw(temp0);
+    window->draw(temp1);
+    window->draw(temp2);
+    window->draw(temp3);
+    window->draw(temp4);
+    window->draw(temp5);
+    window->draw(temp6);
+}
+
+void WindowGraphic::drawPlayerTwoCard()
+{
+    game.assingCardsToPlayer();
+
+    RectangleShape temp = game.getPlayerTwo().getPlayerDeck()[0].getGameCard();
+    temp.setPosition(300, 600);
+
+    RectangleShape temp0 = game.getPlayerTwo().getPlayerDeck()[1].getGameCard();
+    temp0.setPosition(400, 600);
+
+    RectangleShape temp1 = game.getPlayerTwo().getPlayerDeck()[2].getGameCard();
+    temp1.setPosition(500, 600);
+
+    RectangleShape temp2 = game.getPlayerTwo().getPlayerDeck()[3].getGameCard();
+    temp2.setPosition(600, 600);
+
+    RectangleShape temp3 = game.getPlayerTwo().getPlayerDeck()[4].getGameCard();
+    temp3.setPosition(700, 600);
+
+    RectangleShape temp4 = game.getPlayerTwo().getPlayerDeck()[5].getGameCard();
+    temp4.setPosition(800, 600);
+
+    RectangleShape temp5 = game.getPlayerTwo().getPlayerDeck()[6].getGameCard();
+    temp5.setPosition(900, 600);
+
+    RectangleShape temp6 = game.getPlayerTwo().getPlayerDeck()[7].getGameCard();
+    temp6.setPosition(1000, 600);
+
+    window->draw(temp);
+    window->draw(temp0);
+    window->draw(temp1);
+    window->draw(temp2);
+    window->draw(temp3);
+    window->draw(temp4);
+    window->draw(temp5);
+    window->draw(temp6);
 }
 
 Vector2i WindowGraphic::getMousePosition()
@@ -113,10 +190,6 @@ void WindowGraphic::initializeTheMainMenuButtons()
     buttonMainMenu[4].setSize(Vector2f(120, 50));
     buttonMainMenu[4].setPosition(265, 560);
     buttonMainMenu[4].setFillColor(Color::Transparent);
-
-
-
-
 
 }
 
@@ -208,7 +281,10 @@ void WindowGraphic::printGameWindow()
         }
         gameScore();
         playerTurn();
-        drawMatrixCard();
+        //drawMatrixCard();
+        drawPlayerOneCard();
+        drawPlayerTwoCard();
+
         window->display();
     }
 }
