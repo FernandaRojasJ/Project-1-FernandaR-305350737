@@ -1,441 +1,396 @@
 #include "WindowGraphic.h"
+#include "Card.h"
+#include "Player.h"
 
-VideoMode _window = VideoMode::getDesktopMode();
-RenderWindow window(_window, "Game window UNO", Style::Fullscreen);
-string selectedMode = "";
-bool selected_PvsP;
-bool selected_PvsPC;
-Event gameEvent;
+//Card cardInstance;
 
-bool WindowGraphic::startGameButton()
-{
-    Font font;
+//position;
 
-    if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf"))
-    {
-
-        cerr << "Error al cargar la fuente." << endl;
-
-    }
-
-    Text playText("Start", font, 50);
-    playText.setPosition(220, 50);
-
-    RectangleShape playButton;
-    playButton.setSize(Vector2f(playText.getGlobalBounds().width, playText.getGlobalBounds().height));
-    playButton.setPosition(playText.getPosition());
-    playButton.setFillColor(Color::Transparent);
-
-    Color colorNormal = Color::White;
-    Color colorHover = Color::Black;
-    playText.setFillColor(colorNormal);
-
-    Event event;
-    while (window.pollEvent(event))
-    {
-
-        if (event.type == Event::MouseButtonPressed)
-        {
-            if (event.mouseButton.button == Mouse::Left)
-            {
-                Vector2i mousePos = Mouse::getPosition(window);
-                FloatRect textBounds = playText.getGlobalBounds();
-
-                if (playButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
-                {
-                    return true;
-                }
-                
-            }
-        }
-    }
-
-    window.draw(playText);
-}
+//vector<RectangleShape>cards = cardInstance.loadCards();
 
 
 WindowGraphic::WindowGraphic()
 {
-   
-	window.setFramerateLimit(60);
+    font.loadFromFile("resources/Fonts/Crayon Kids.otf");
+
+    gameEvent = new Event();
+    window = new RenderWindow(VideoMode(1366, 768), "Game window UNO", Style::Fullscreen);
+    window->setFramerateLimit(60);
     background.setSize(Vector2f(1372, 772));
-    backroundTexture.loadFromFile("resources/backgrounds/BckUnoRedi.jpg");
+    backroundTexture.loadFromFile("resources/backgrounds/BackgroundReal.jpg");
     background.setTexture(&backroundTexture);
+
+    backgroundGame.setSize(Vector2f(1372, 772));
+    backroundGameTexture.loadFromFile("resources/backgrounds/BackgroundTwo.jpg");
+    backgroundGame.setTexture(&backroundGameTexture);
+
+
 
 }
 
 
-bool WindowGraphic::openHelpWindow()
+void WindowGraphic::closeWindowAction()
 {
-    RenderWindow helpWindow(VideoMode(700, 500), "Window Help");
-    Font font;
+    window->close();
+    exit(1);
+}
+
+
+void WindowGraphic::processMainMenuEvents() {
+    while (window->pollEvent(*gameEvent)) {
+        switch (gameEvent->type)
+        {
+        case Event::Closed:
+            closeWindowAction();
+            break;
+
+        case Event::KeyPressed:
+            //getEscapeKeyActionCloseWindow();
+            break;
+
+        case Event::MouseMoved:
+             getMouseMovementMainMenu();
+            break;
+
+        case Event::MouseButtonReleased:
+            getMainMenuButtonsActions();
+            break;
+
+
+        }
+    }
+}
+
+void WindowGraphic::drawMatrixCard()
+{
+    RectangleShape temporal;
+    game.loadCards();
+    temporal = game.cards[56].getGameCard();
+    temporal.setPosition(1200, 600);
+
+    RectangleShape temporal1 = game.cards[70].getGameCard();
+    temporal1.setPosition(1200, 500);
+
+    RectangleShape temporal2 = game.cards[84].getGameCard();
+    temporal2.setPosition(1200, 400);
+
+    RectangleShape temporal3 = game.cards[98].getGameCard();
+    temporal3.setPosition(1200, 300);
+
+    window->draw(temporal);
+    window->draw(temporal1);
+    window->draw(temporal2);
+    window->draw(temporal3);
+
+}
+
+Vector2i WindowGraphic::getMousePosition()
+{
+    Vector2i mousePosition;
+    mousePosition = Mouse::getPosition(*window);
+    return mousePosition;
+}
+
+
+void WindowGraphic::initializeTheMainMenuButtons()
+{
+    buttonMainMenu[0].setSize(Vector2f(135, 50));
+    buttonMainMenu[0].setPosition(270, 60);
+    buttonMainMenu[0].setFillColor(Color::Transparent);
+
+    buttonMainMenu[1].setSize(Vector2f(150, 50));
+    buttonMainMenu[1].setPosition(260, 160);
+    buttonMainMenu[1].setFillColor(Color::Transparent);
+
+    buttonMainMenu[2].setSize(Vector2f(400, 40));
+    buttonMainMenu[2].setPosition(120, 355);
+    buttonMainMenu[2].setFillColor(Color::Transparent);
+
+    buttonMainMenu[3].setSize(Vector2f(455, 40));
+    buttonMainMenu[3].setPosition(93, 455);
+    buttonMainMenu[3].setFillColor(Color::Transparent);
+
+    buttonMainMenu[4].setSize(Vector2f(120, 50));
+    buttonMainMenu[4].setPosition(265, 560);
+    buttonMainMenu[4].setFillColor(Color::Transparent);
+
+
+
+
+
+}
+
+void WindowGraphic::drawMainButton()
+{
+    for (int i = 0; i < 5; i++)
+    {
+        window->draw(buttonMainMenu[i]);
+    }
+
+}
+
+void WindowGraphic::getMainMenuButtonsActions() {
+    if (gameEvent->mouseButton.button == Mouse::Left) {
+        for (int i = 0; i < 5; i++) {
+            if (buttonMainMenu[i].getGlobalBounds().contains(getMousePosition().x, getMousePosition().y)) {
+                switch (i) {
+                case 0:
+                    if (isPlayerVsPlayer != false || isPlayerVsComputer != false)
+                    {
+                        printGameWindow();
+                        gameScore();
+                    }
+                    break;
+
+                case 1:
+                    gameScore();
+                    printHelpWindow();
+                    
+
+                    break;
+
+                case 2:
+                    buttonText[3].setFillColor(Color::Black);
+                    buttonText[4].setFillColor(Color::White);
+                    isPlayerVsPlayer = true;
+                    isPlayerVsComputer = false;
+                    break;
+
+                case 3:
+                    buttonText[4].setFillColor(Color::Black);
+                    buttonText[3].setFillColor(Color::White);
+                    isPlayerVsPlayer = false;
+                    isPlayerVsComputer = true;
+                    break;
+
+                case 4:
+                    closeWindowAction();
+                    break;
+
+                }
+            }
+        }
+    }
+}
+
+void WindowGraphic::printMainMenu()
+{
+    initializeTheMainMenuButtons();
+    initializeTheButtonText();
+    while (window->isOpen())
+    {
+        window->clear();
+        processMainMenuEvents();
+        window->draw(background);
+        drawMainButton();
+        drawTextButton();
+        window->display();
+        
+    }
+
+}
+
+void WindowGraphic::printGameWindow()
+{
+    
+    while (window->isOpen())
+    {
+        window->clear();
+        window->draw(backgroundGame);
+        if (isPlayerVsPlayer)
+        {
+            drawPlayerVsPlayerGame();
+        }
+        else
+        {
+            drawPlayerVsComputerGame();
+
+        }
+        gameScore();
+        playerTurn();
+        drawMatrixCard();
+        window->display();
+    }
+}
+
+void WindowGraphic::drawPlayerVsPlayerGame()
+{
+
+    Text playerOne(game.getPlayerOne().getName(), font, 20);
+    playerOne.setPosition(25, 25);
+
+    Text playerTwo(game.getPlayerTwo().getName(), font, 20);
+    playerTwo.setPosition(25, 675);
+
+    window->draw(playerOne);
+    window->draw(playerTwo);
+
+}
+
+void WindowGraphic::run()
+{
+    printMainMenu();
+}
+
+void WindowGraphic::drawPlayerVsComputerGame()
+{
+    Text player("Player: ", font, 20);
+    player.setPosition(25, 25);
+
+    Text computer("Computer: ", font, 20);
+    computer.setPosition(25, 675);
+
+    window->draw(player);
+    window->draw(computer);
+}
+
+void WindowGraphic::printHelpWindow()
+{
+    RenderWindow helpWindow(VideoMode(800, 600), "Help", Style::Close);
+
+    Texture backgroundHelpTexture;
+    backgroundHelpTexture.loadFromFile("resources/backgrounds/BackHelp.jpg");
+    Sprite backgroundHelp(backgroundHelpTexture);
 
     if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf"))
     {
-        cerr << "Error al cargar la fuente." << endl;
-    }
-
-    Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("resources/backgrounds/BackHelp.jpg"))
-    {
+        
         cerr << "Error al cargar la imagen de fondo." << endl;
     }
-
-    Sprite backgroundSprite(backgroundTexture);
 
     Text defaultText("Reglas del juego", font, 18);
     defaultText.setPosition(20, 20);
 
     while (helpWindow.isOpen())
     {
-        Event event;
-        while (helpWindow.pollEvent(event))
+        Event helpEvent;
+        while (helpWindow.pollEvent(helpEvent))
         {
-            if (event.type == Event::Closed)
-                helpWindow.close();
+            if (helpEvent.type == Event::Closed)
+            {
+                helpWindow.close(); 
+            }
         }
 
         helpWindow.clear();
-        helpWindow.draw(backgroundSprite);
+        helpWindow.draw(backgroundHelp);
         helpWindow.draw(defaultText);
         helpWindow.display();
     }
-
-    return true; 
 }
 
-int WindowGraphic::modeTitle()
+void WindowGraphic::playerTurn()
 {
-    Font font;
-    if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf")) 
-    {
-        return 1;
-    }
 
-    Text titleText("Select game mode:", font, 50);
-    titleText.setPosition(25, 250);
+    Text turn("Turn: ", font, 18);
+    turn.setPosition(1250, 20);
+    turn.setFillColor(Color::Black);
 
-    RectangleShape title;
-    title.setSize(Vector2f(titleText.getGlobalBounds().width, titleText.getGlobalBounds().height));
-    title.setPosition(titleText.getPosition());
-    title.setFillColor(Color::Transparent);
-
-    window.draw(titleText);
+    window->draw(turn);
 }
 
-void WindowGraphic::playerVrsPlayerButton()
+void WindowGraphic::gameScore()
 {
-    Font font;
 
-    if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf"))
+    Text scoreOne("Score: ", font, 20);
+    scoreOne.setPosition(170, 25);
+    scoreOne.setFillColor(Color::Black);
+
+    Text scoreTwo("Score: ", font, 20);
+    scoreTwo.setPosition(170, 675);
+    scoreTwo.setFillColor(Color::Black);
+
+    window->draw(scoreOne);
+    window->draw(scoreTwo);
+
+}
+    
+
+
+
+
+void WindowGraphic::initializeTheButtonText()
+{
+
+    buttonText[0].setFont(font);
+    buttonText[0].setPosition(267, 50);
+    buttonText[0].setFillColor(Color::White);
+    buttonText[0].setCharacterSize(50);
+    buttonText[0].setString("Start");
+     
+    buttonText[1].setFont(font);
+    buttonText[1].setPosition(270, 150);
+    buttonText[1].setFillColor(Color::White);
+    buttonText[1].setCharacterSize(50);
+    buttonText[1].setString("Help");
+
+    buttonText[2].setFont(font);
+    buttonText[2].setPosition(75, 250);
+    buttonText[2].setFillColor(Color::White);
+    buttonText[2].setCharacterSize(50);
+    buttonText[2].setString("Select game mode:");
+
+    buttonText[3].setFont(font);
+    buttonText[3].setPosition(140, 350);
+    buttonText[3].setFillColor(Color::White);
+    buttonText[3].setCharacterSize(40);
+    buttonText[3].setString("Player vs Player");
+
+    buttonText[4].setFont(font);
+    buttonText[4].setPosition(98, 450);
+    buttonText[4].setFillColor(Color::White);
+    buttonText[4].setCharacterSize(40);
+    buttonText[4].setString("Player vs Computer");
+
+    buttonText[5].setFont(font);
+    buttonText[5].setPosition(270, 550);
+    buttonText[5].setFillColor(Color::White);
+    buttonText[5].setCharacterSize(50);
+    buttonText[5].setString("Exit");
+
+}
+
+void WindowGraphic::drawTextButton()
+{
+    for (int i = 0; i < 6; i++)
     {
-
-        cerr << "Error al cargar la fuente." << endl;
-
+        window->draw(buttonText[i]);
     }
 
-    Text playerVrsPlayerText("-Player vrs Player", font, 40);
-    playerVrsPlayerText.setPosition(75, 350);
+}
 
-    if ((selected_PvsP == true) && (selected_PvsPC == false))
+void WindowGraphic::getMouseMovementMainMenu() 
+{
+    for (int i = 0; i < 5; i++) 
     {
-        playerVrsPlayerText.setFillColor(Color::Black);
-    }
-
-    RectangleShape playerButton;
-    playerButton.setSize(Vector2f(playerVrsPlayerText.getGlobalBounds().width, playerVrsPlayerText.getGlobalBounds().height));
-    playerButton.setPosition(playerVrsPlayerText.getPosition());
-    playerButton.setFillColor(Color::Transparent);
-
-
-    Event event;
-    while (window.pollEvent(event))
-    {
-
-        if (event.type == Event::MouseButtonPressed)
-        {
-            if (event.mouseButton.button == Mouse::Left)
+            if (buttonMainMenu[i].getGlobalBounds().contains(getMousePosition().x, getMousePosition().y)) 
             {
-                Vector2i mousePos = Mouse::getPosition(window);
-                FloatRect textBounds = playerVrsPlayerText.getGlobalBounds();
-
-                if (playerButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
-                {
-                    selectedMode = "Player vs Player";
-                    selected_PvsP = true;
-                    selected_PvsPC = false;
+                switch (i) {
+                case 0:
+                    buttonText[0].setFillColor(Color::Yellow);
+                    break;
+                case 1:
+                    buttonText[1].setFillColor(Color::Yellow);
+                    break;
+                case 4:
+                    buttonText[5].setFillColor(Color::Yellow);
+                    break;
                 }
             }
-        }
-    }
 
-    window.draw(playerVrsPlayerText);
-
-
-
-
-}
-
-void WindowGraphic::playerVrsComputerButton()
-{
-    Font font;
-
-    if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf"))
-    {
-
-        cerr << "Error al cargar la fuente." << endl;
-
-    }
-
-    Text playerVrsComputerText("-Player vrs Computer", font, 40);
-    playerVrsComputerText.setPosition(75, 450);
-
-    if ((selected_PvsPC == true) && (selected_PvsP == false))
-    {
-        playerVrsComputerText.setFillColor(Color::Black);
-    }
-
-    RectangleShape player_ComputerButton;
-    player_ComputerButton.setSize(Vector2f(playerVrsComputerText.getGlobalBounds().width, playerVrsComputerText.getGlobalBounds().height));
-    player_ComputerButton.setPosition(playerVrsComputerText.getPosition());
-    player_ComputerButton.setFillColor(Color::Transparent);
-
-
-    Event event;
-    while (window.pollEvent(event))
-    {
-
-        if (event.type == Event::MouseButtonPressed)
-        {
-            if (event.mouseButton.button == Mouse::Left)
+            else 
             {
-                Vector2i mousePos = Mouse::getPosition(window);
-                FloatRect textBounds = playerVrsComputerText.getGlobalBounds();
-
-                
-
-                if (player_ComputerButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
-                {
-                    selectedMode = "Player vs Computer";
-                    selected_PvsPC = true;
-                    selected_PvsP = false;
+                switch (i) {
+                case 0:
+                    buttonText[0].setFillColor(Color::White);
+                    break;
+                case 1:
+                    buttonText[1].setFillColor(Color::White);
+                    break;
+                case 4:
+                    buttonText[5].setFillColor(Color::White);
+                    break;
                 }
             }
-        }
-    }
-
-    window.draw(playerVrsComputerText);
-
-}
-
-void WindowGraphic::gameWindow()
-{
-    VideoMode _newWindow = VideoMode::getDesktopMode();
-    RenderWindow newWindow(_newWindow, "Game Screen", Style::Fullscreen);
-
-    if (!selectedMode.empty())
-    {
-        Texture backgroundTexture;
-        if (!backgroundTexture.loadFromFile("resources/backgrounds/mainMenu.jpg"))
-        {
-
-        }
-
-        Sprite backgroundSprite;
-        backgroundSprite.setTexture(backgroundTexture);
-
-        while (newWindow.isOpen())
-        {
-            Event newEvent;
-
-            while (newWindow.pollEvent(newEvent))
-            {
-                if (newEvent.type == Event::Closed)
-                    newWindow.close();
-            }
-
-            newWindow.clear();
-
-            newWindow.draw(backgroundSprite);
-
-            newWindow.display();
-        }
-    }
-}
-
-bool WindowGraphic::exitButton()
-{
-    Font font;
-
-    if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf"))
-    {
-
-        cerr << "Error al cargar la fuente." << endl;
-
-    }
-
-    Text exitText("Exit", font, 50);
-    exitText.setPosition(220, 550);
-
-    RectangleShape exitButton;
-    exitButton.setSize(Vector2f(exitText.getGlobalBounds().width, exitText.getGlobalBounds().height));
-    exitButton.setPosition(exitText.getPosition());
-    exitButton.setFillColor(Color::Transparent);
-
-
-    Event event;
-    while (window.pollEvent(event))
-    {
-
-        if (event.type == Event::MouseButtonPressed)
-        {
-            if (event.mouseButton.button == Mouse::Left)
-            {
-                Vector2i mousePos = Mouse::getPosition(window);
-                FloatRect textBounds = exitText.getGlobalBounds();
-
-                if (exitButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
-                {
-                    return true;
-                }
-            }
-        }
-    }
-
-    window.draw(exitText);
-
-}
-
-bool WindowGraphic::helpButton()
-{
-    Font font;
-
-    if (!font.loadFromFile("resources/Fonts/Crayon Kids.otf"))
-    {
-
-        cerr << "Error al cargar la fuente." << endl;
-
-    }
-
-    Text helpText("Help", font, 50);
-    helpText.setPosition(220, 150);
-
-    RectangleShape helpButton;
-    helpButton.setSize(Vector2f(helpText.getGlobalBounds().width, helpText.getGlobalBounds().height));
-    helpButton.setPosition(helpText.getPosition());
-    helpButton.setFillColor(Color::Transparent);
-
-    Event event;
-    while (window.pollEvent(event))
-    {
-
-        if (event.type == Event::MouseButtonPressed)
-        {
-            if (event.mouseButton.button == Mouse::Left)
-            {
-                Vector2i mousePos = Mouse::getPosition(window);
-                FloatRect textBounds = helpText.getGlobalBounds();
-
-                if (helpButton.getGlobalBounds().contains(static_cast<Vector2f>(mousePos)))
-                {
-                    return true;
-
-                }
-            }
-       }
-    }
-
-    window.draw(helpText);
-}
-
-void WindowGraphic::printMainMenu()
-{
-    while (window.isOpen()) {
-        window.clear();
-        window.draw(background);
-
-        if (startGameButton() == true)
-        {
-            if (!selectedMode.empty())
-            {
-                window.close();
-                gameWindow();
-            }
-        }
-
-        if (exitButton() == true) {
-
-            window.close();
-            exitButton();
-        }
-        
-        if (helpButton() == true) {
-
-            openHelpWindow();
-            helpButton();
-        }
-
-        if (modeTitle() == true) {
-
-            modeTitle();
-        }
-
-            playerVrsPlayerButton();
-
-            playerVrsComputerButton();
-        
-
-        Texture _texture;
-        if (!_texture.loadFromFile("resources/Cartas/Cartas UNO.png"))
-        {
-            cout << "no se pudo cargar la imagen";
-        }
-
-        RectangleShape _rectangle(Vector2f(57, 86));
-        _rectangle.setPosition(1200, 600);
-
-        _rectangle.setTexture(&_texture);
-
-        IntRect area(0, 0, 57, 86);
-        _rectangle.setTextureRect(area);
-        
-        window.draw(_rectangle);
-        window.display();
-        processMainMenuEvents();
- 
-	}
-}
-
-
-void WindowGraphic::closeWindowAction()
-{
-    window.close();
-    exit(1);
-}
-
-void WindowGraphic::processMainMenuEvents() {
-    while (window.pollEvent(gameEvent)) {
-        switch (gameEvent.type)
-        {
-        case Event::Closed:
-            closeWindowAction();
-            break;
-
-
-
-        //case Event::KeyPressed:
-        //    getEscapeKeyActionCloseWindow();
-        //    break;
-
-        //case Event::MouseMoved:
-        //    getMouseMovementMainMenu();
-        //   break;
-
-        //case Event::MouseButtonReleased:
-        //    getMainMenuButtonsActions();
-        //    break;
-
-
-        }
     }
 }
