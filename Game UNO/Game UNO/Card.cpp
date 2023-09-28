@@ -3,15 +3,15 @@
 Card::Card()
 {
 	points = 0;
-	id = 0;
+	id = "";
 	cardSide = true;
-	frontImage = new IntRect();
-	rearImage = new IntRect();
+	rearImage = 	frontImage = new IntRect();
+new IntRect();
 	gameCard.setSize(Vector2f(57, 86));
 
 }
 
-Card::Card(int anId)
+Card::Card(string anId)
 {
 	points = 0;
 	id = anId;
@@ -22,7 +22,7 @@ Card::Card(int anId)
 	gameCard.setSize(Vector2f(57, 86));
 }
 
-Card::Card(int anId, IntRect* aFrontImage, IntRect* aRearImage, bool aCardSide, int aPoints)
+Card::Card(string anId, IntRect* aFrontImage, IntRect* aRearImage, bool aCardSide, int aPoints)
 {
 	id = anId;
 	frontImage = aFrontImage;
@@ -43,12 +43,12 @@ void Card::setPoints(int aPoints)
 	points = aPoints;
 }
 
-int Card::getId() 
+string Card::getId() 
 {
 	return id;
 }
 
-void Card::setId(int anId)
+void Card::setId(string anId)
 {
 	id = anId;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "Card.h"
@@ -14,15 +15,22 @@ class Game
 private:
 	int rows = 8;
 	int columns = 14;
+	
 	Texture cardTexture;
-	Player playerOne= Player("Jugador 1: ");
-	Player playerTwo = Player("Judador 2: ");
+	Player playerOne = Player("Jugador 1", 0);
+	Player playerTwo = Player("Judador 2", 0);
 	vector<Card> trashDeck;
 	vector<Card> cards;
+
+	
+	
 public:
 	Game();
+	Card trashCard;
+	int Turn = 1;
 
-	void loadCards();
+	int getTurn();
+	void setTurn(int aTurn);
 
 	Player getPlayerOne();
 	void setPlayerOne(Player aPlayerOne);
@@ -36,10 +44,22 @@ public:
 	vector<Card> getCards();
 	void getCards(vector<Card> aCards);
 
-	void assingCardsToPlayer();
+	void setTrashCard(Card aTrashCard);
+	Card getTrashCard();
 
-	void mainDeck();
+	void assingCardsToPlayer(vector<Card> aCards);
 
+	void loadCards();
+
+	void addCardToDeckOne();
+	void addCardToDeckTwo();
+
+	void deleteCardToDeckOne(int position);
+	void deleteCardToDeckTwo(int position);
+
+	Card getRandomCard();
+
+	void logicGame(Card aCardselected, int position);
 
 };
 

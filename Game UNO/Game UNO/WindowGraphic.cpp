@@ -3,12 +3,6 @@
 #include "Player.h"
 #include "Game.h"
 
-//Card cardInstance;
-
-//position;
-
-//vector<RectangleShape>cards = cardInstance.loadCards();
-
 
 WindowGraphic::WindowGraphic()
 {
@@ -46,7 +40,7 @@ void WindowGraphic::processMainMenuEvents() {
             break;
 
         case Event::KeyPressed:
-            //getEscapeKeyActionCloseWindow();
+          
             break;
 
         case Event::MouseMoved:
@@ -62,104 +56,226 @@ void WindowGraphic::processMainMenuEvents() {
     }
 }
 
-void WindowGraphic::drawMatrixCard()
+void WindowGraphic::processGameMenuEvents()
 {
-    game.loadCards();
+    while (window->pollEvent(*gameEvent)) {
+        switch (gameEvent->type)
+        {
+        case Event::Closed:
+            closeWindowAction();
+            break;
 
-    RectangleShape temporal = game.getCards()[107].getGameCard();
-    temporal.setPosition(1200, 600);
+        case Event::KeyPressed:
 
-    RectangleShape temporal1 = game.getCards()[70].getGameCard();
-    temporal1.setPosition(1200, 500);
+            break;
 
-    RectangleShape temporal2 = game.getCards()[84].getGameCard();
-    temporal2.setPosition(1200, 400);
+        case Event::MouseMoved:
+            getMouseMovementMainMenu();
+            break;
 
-    RectangleShape temporal3 = game.getCards()[98].getGameCard();
-    temporal3.setPosition(1200, 300);
+        case Event::MouseButtonReleased:
+            getGameButtonsActions();
+            break;
 
-    window->draw(temporal);
-    window->draw(temporal1);
-    window->draw(temporal2);
-    window->draw(temporal3);
 
+        }
+    }
 }
 
 void WindowGraphic::drawPlayerOneCard()
 {
-    game.assingCardsToPlayer();
-
-    RectangleShape temp = game.getPlayerOne().getPlayerDeck()[0].getGameCard();
-    temp.setPosition(300, 100);
-
-    RectangleShape temp0 = game.getPlayerOne().getPlayerDeck()[1].getGameCard();
-    temp0.setPosition(400, 100);
-
-    RectangleShape temp1 = game.getPlayerOne().getPlayerDeck()[2].getGameCard();
-    temp1.setPosition(500, 100);
-
-    RectangleShape temp2 = game.getPlayerOne().getPlayerDeck()[3].getGameCard();
-    temp2.setPosition(600, 100);
-
-    RectangleShape temp3 = game.getPlayerOne().getPlayerDeck()[4].getGameCard();
-    temp3.setPosition(700, 100);
-
-    RectangleShape temp4 = game.getPlayerOne().getPlayerDeck()[5].getGameCard();
-    temp4.setPosition(800, 100);
-
-    RectangleShape temp5 = game.getPlayerOne().getPlayerDeck()[6].getGameCard();
-    temp5.setPosition(900, 100);
-
-    RectangleShape temp6 = game.getPlayerOne().getPlayerDeck()[7].getGameCard();
-    temp6.setPosition(1000, 100);
-
-    window->draw(temp);
-    window->draw(temp0);
-    window->draw(temp1);
-    window->draw(temp2);
-    window->draw(temp3);
-    window->draw(temp4);
-    window->draw(temp5);
-    window->draw(temp6);
+    for (int i = 0; i < game.getPlayerOne().getPlayerDeck().size(); i++) {
+        if (i <= 10) {
+            RectangleShape temp = game.getPlayerOne().getPlayerDeck()[i].getGameCard();
+            temp.setPosition((i * 100) + 300, 17);
+            window->draw(temp);
+        }
+        if (i >= 10 && i <= 20) {
+            RectangleShape temp = game.getPlayerOne().getPlayerDeck()[i].getGameCard();
+            temp.setPosition(((i - 10) * 100) + 300, 117);
+            window->draw(temp);
+        }
+    }
 }
 
 void WindowGraphic::drawPlayerTwoCard()
 {
-    game.assingCardsToPlayer();
-
-    RectangleShape temp = game.getPlayerTwo().getPlayerDeck()[0].getGameCard();
-    temp.setPosition(300, 600);
-
-    RectangleShape temp0 = game.getPlayerTwo().getPlayerDeck()[1].getGameCard();
-    temp0.setPosition(400, 600);
-
-    RectangleShape temp1 = game.getPlayerTwo().getPlayerDeck()[2].getGameCard();
-    temp1.setPosition(500, 600);
-
-    RectangleShape temp2 = game.getPlayerTwo().getPlayerDeck()[3].getGameCard();
-    temp2.setPosition(600, 600);
-
-    RectangleShape temp3 = game.getPlayerTwo().getPlayerDeck()[4].getGameCard();
-    temp3.setPosition(700, 600);
-
-    RectangleShape temp4 = game.getPlayerTwo().getPlayerDeck()[5].getGameCard();
-    temp4.setPosition(800, 600);
-
-    RectangleShape temp5 = game.getPlayerTwo().getPlayerDeck()[6].getGameCard();
-    temp5.setPosition(900, 600);
-
-    RectangleShape temp6 = game.getPlayerTwo().getPlayerDeck()[7].getGameCard();
-    temp6.setPosition(1000, 600);
-
-    window->draw(temp);
-    window->draw(temp0);
-    window->draw(temp1);
-    window->draw(temp2);
-    window->draw(temp3);
-    window->draw(temp4);
-    window->draw(temp5);
-    window->draw(temp6);
+    
+    for (int i = 0; i < game.getPlayerTwo().getPlayerDeck().size(); i++) {
+        if (i <= 10) {
+            RectangleShape temp = game.getPlayerTwo().getPlayerDeck()[i].getGameCard();
+            temp.setPosition((i * 100) + 300, 675);
+            window->draw(temp);
+        }
+        if (i >= 10 && i <= 20) {
+            RectangleShape temp = game.getPlayerTwo().getPlayerDeck()[i].getGameCard();
+            temp.setPosition(((i - 10) * 100) + 300, 575);
+            window->draw(temp);
+        }
+    }
 }
+
+void WindowGraphic::drawMainDeck()
+{
+    Texture texture;
+    if (!texture.loadFromFile("resources/Cartas/Carta_Trasera.jpg"))
+    {
+        cout << "no se pudo cargar la imagen";
+    }
+
+    RectangleShape rectangle(sf::Vector2f(texture.getSize().x, texture.getSize().y));
+
+    rectangle.setTexture(&texture);
+    rectangle.setPosition(810, 340);
+
+    window->draw(rectangle);
+}
+
+void WindowGraphic::drawTrashDeck()
+{
+    RectangleShape rectangle = TrashCardImage;
+    rectangle.setSize(Vector2f(114, 174));
+    rectangle.setPosition(410, 340);
+    window->draw(rectangle);
+}
+
+void WindowGraphic::drawOptionsMainDeck()
+{
+    if (mainDeckSelected) {
+        Text continueEating;
+        Text passTurn;
+        continueEating.setFont(font);
+        continueEating.setPosition(990, 340);
+        continueEating.setFillColor(Color::White);
+        continueEating.setCharacterSize(16);
+        continueEating.setString("Comer");
+
+        passTurn.setFont(font);
+        passTurn.setPosition(990, 440);
+        passTurn.setFillColor(Color::White);
+        passTurn.setCharacterSize(16);
+        passTurn.setString("Pasar turno");
+
+        window->draw(continueEating);
+        window->draw(passTurn);
+    }
+}
+
+void WindowGraphic::initializeTheGameButtons()
+{
+    buttonGame[0].setSize(Vector2f(114, 174));
+    buttonGame[0].setPosition(810, 340);
+    buttonGame[0].setFillColor(Color::Transparent);
+
+    buttonGame[1].setSize(Vector2f(130, 50));
+    buttonGame[1].setPosition(970, 320);
+    buttonGame[1].setFillColor(Color::Transparent);
+
+    buttonGame[2].setSize(Vector2f(130, 50));
+    buttonGame[2].setPosition(970, 420);
+    buttonGame[2].setFillColor(Color::Transparent);
+
+    buttonGame[3].setSize(Vector2f(114, 174));
+    buttonGame[3].setPosition(410, 340);
+    buttonGame[3].setFillColor(Color::Transparent);
+
+    for (int i = 0; i < 20; i++) {
+        if (i <= 10) {
+            buttonGame[i + 4].setSize(Vector2f(57, 86));
+            buttonGame[i + 4].setPosition((i * 100) + 300, 17);
+            buttonGame[i + 4].setFillColor(Color::Transparent);
+        }
+        if (i >= 10 && i <= 20) {
+            buttonGame[i + 4].setSize(Vector2f(57, 86));
+            buttonGame[i + 4].setPosition(((i - 10) * 100) + 300, 117);
+            buttonGame[i + 4].setFillColor(Color::Transparent);
+        }
+    }
+
+    for (int i = 0; i < 20; i++) {
+        if (i <= 10) {
+            buttonGame[i + 24].setSize(Vector2f(57, 86));
+            buttonGame[i + 24].setPosition((i * 100) + 300, 675);
+            buttonGame[i + 24].setFillColor(Color::Transparent);
+        }
+        if (i >= 10 && i <= 20) {
+            buttonGame[i + 24].setSize(Vector2f(57, 86));
+            buttonGame[i + 24].setPosition(((i - 10) * 100) + 300, 575);
+            buttonGame[i + 24].setFillColor(Color::Transparent);
+        }
+    }
+}
+
+void WindowGraphic::drawGameButton()
+{
+    for (int i = 0; i < 44; i++)
+    {
+        window->draw(buttonGame[i]);
+    }
+}
+
+void WindowGraphic::getGameButtonsActions()
+{
+    if (gameEvent->mouseButton.button == Mouse::Left)
+    {
+        for (int i = 0; i < 44; i++) 
+        {
+            if (buttonGame[i].getGlobalBounds().contains(getMousePosition().x, getMousePosition().y)) 
+            {
+                switch (i)
+                {
+                case 0:
+                    mainDeckSelected = true;
+                    break;
+
+                case 1:
+                    if (game.getTurn() == 1) {
+                        game.addCardToDeckOne();
+                    }
+                    if (game.getTurn() == 2) {
+                        game.addCardToDeckTwo();
+                    }
+                    break;
+
+                case 2:
+                    if (game.getTurn() == 1) {
+                        game.setTurn(2);
+                    }else {
+                        game.setTurn(1);
+                    }
+                    mainDeckSelected = false;
+                    break;
+                        
+                case 3: 
+                    CardTrashSelected = true;
+                }
+                if (i >= 4 && i <= game.getPlayerOne().getPlayerDeck().size() + 4) {
+                    if (game.getTurn() == 1) {
+                        ;
+                        if (CardTrashSelected) {  
+                            int index = (i - 4);
+                         
+                            game.logicGame(game.getPlayerOne().getPlayerDeck()[i - 4], index);
+                            TrashCardImage = game.getTrashCard().getGameCard();
+                        }
+                    }
+                }
+                if (i >= 24) {
+                    if (game.getTurn() == 2) {
+                        
+                        if (CardTrashSelected) {
+                            int index = (i - 24);
+                           
+                            game.logicGame(game.getPlayerTwo().getPlayerDeck()[i - 24], index);
+                            TrashCardImage = game.getTrashCard().getGameCard();
+                        }
+                    }
+                }         
+            }
+        }
+    }
+}
+
 
 Vector2i WindowGraphic::getMousePosition()
 {
@@ -265,10 +381,16 @@ void WindowGraphic::printMainMenu()
 
 void WindowGraphic::printGameWindow()
 {
-    
+    game.loadCards();
+    game.assingCardsToPlayer(game.getCards());
+    initializeTheGameButtons();
+    game.setTrashCard(game.getRandomCard());
+    TrashCardImage = game.getTrashCard().getGameCard();
+
     while (window->isOpen())
     {
         window->clear();
+        processGameMenuEvents();
         window->draw(backgroundGame);
         if (isPlayerVsPlayer)
         {
@@ -281,9 +403,12 @@ void WindowGraphic::printGameWindow()
         }
         gameScore();
         playerTurn();
-        //drawMatrixCard();
         drawPlayerOneCard();
         drawPlayerTwoCard();
+        drawMainDeck();
+        drawGameButton();
+        drawOptionsMainDeck();
+        drawTrashDeck();
 
         window->display();
     }
@@ -357,33 +482,40 @@ void WindowGraphic::printHelpWindow()
 
 void WindowGraphic::playerTurn()
 {
+    string nameTurn;
+    if (game.getTurn() == 1) {
+        nameTurn = "Jugador 1";
+    }
+    if (game.getTurn() == 2) {
+        nameTurn = "Jugador 2";
+    }
 
-    Text turn("Turn: ", font, 18);
-    turn.setPosition(1250, 20);
-    turn.setFillColor(Color::Black);
+    Text turn("Turno: ", font, 18);
+    Text player(nameTurn, font, 18);
+    turn.setPosition(25, 370);
+    turn.setFillColor(Color::White);
+    player.setPosition(100, 370);
+    player.setFillColor(Color::Black);
 
     window->draw(turn);
+    window->draw(player);
 }
 
 void WindowGraphic::gameScore()
 {
 
     Text scoreOne("Score: ", font, 20);
-    scoreOne.setPosition(170, 25);
+    scoreOne.setPosition(25, 60);
     scoreOne.setFillColor(Color::Black);
 
     Text scoreTwo("Score: ", font, 20);
-    scoreTwo.setPosition(170, 675);
+    scoreTwo.setPosition(25, 710);
     scoreTwo.setFillColor(Color::Black);
 
     window->draw(scoreOne);
     window->draw(scoreTwo);
 
 }
-    
-
-
-
 
 void WindowGraphic::initializeTheButtonText()
 {
@@ -470,3 +602,7 @@ void WindowGraphic::getMouseMovementMainMenu()
             }
     }
 }
+
+
+
+

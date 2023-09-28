@@ -19,13 +19,13 @@ private:
 	RectangleShape backgroundGame;
 	Texture backgroundHelpTexture;
 	RectangleShape backgroundHelp;
+	RectangleShape buttonShape;
 	RectangleShape buttonMainMenu[5];
+	RectangleShape buttonGame[44];
 	Text buttonText[6];
 	RenderWindow* window;
 	string selectedMode = "";
 	Event* gameEvent;
-	Text playerOne;
-	Text playerTwo;
 	Text player;
 	Text computer;
 	Text turn;
@@ -33,14 +33,18 @@ private:
 	Text scoreTwo;
 	Font font;
 	Game game;
+	RectangleShape TrashCardImage;
+	bool CardTrashSelected;
 
 public:
 	bool isPlayerVsPlayer = false;
 	bool isPlayerVsComputer = false;
+	bool mainDeckSelected = false;
 
 	WindowGraphic();
 	void closeWindowAction();
 	void processMainMenuEvents();
+	void processGameMenuEvents();
 	void getMainMenuButtonsActions();
 	Vector2i getMousePosition();
 	void initializeTheMainMenuButtons();
@@ -49,7 +53,6 @@ public:
 	void printGameWindow();
 	void initializeTheButtonText();
 	void drawTextButton();
-	void drawMatrixCard();
 	void run();
 	void getMouseMovementMainMenu();
 	void drawPlayerVsPlayerGame();
@@ -57,7 +60,13 @@ public:
 	void printHelpWindow();
 	void playerTurn();
 	void gameScore();
+	void initializeTheGameButtons();
+	void drawGameButton();
+	void getGameButtonsActions();
 	void drawPlayerOneCard();
 	void drawPlayerTwoCard();
+	void drawMainDeck();
+	void drawTrashDeck();
+	void drawOptionsMainDeck();
 
 };
